@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { JoyStick } from '../lib/joystick';
 
 export default class Car {
     constructor(scene, world) {
@@ -22,7 +23,7 @@ export default class Car {
         const chassisShape = new CANNON.Box(chassisDimensions);
         const groundMaterial = new CANNON.Material("groundMaterial");
         const wheelMaterial = new CANNON.Material("wheelMaterial");
-        const chassisBody = new CANNON.Body({ mass: 150, material: groundMaterial });
+        const chassisBody = new CANNON.Body({ mass: 100, material: groundMaterial });
         
         const helpChassisGeo = new THREE.BoxBufferGeometry(chassisDimensions.x * 2, chassisDimensions.y * 2, chassisDimensions.z * 2);
         const helpChassisMat = new THREE.MeshStandardMaterial({color: 0xff0000, wireframe: true});
@@ -178,10 +179,10 @@ export default class Car {
         }
 
         const brake = () => {    
-            this.vehicle.setBrake(brakeForce * 1.3, 0);
-            this.vehicle.setBrake(brakeForce * 1.3, 1);
-            this.vehicle.setBrake(brakeForce * 1.3, 2);
-            this.vehicle.setBrake(brakeForce * 1.3, 3);
+            this.vehicle.setBrake(brakeForce * 2, 0);
+            this.vehicle.setBrake(brakeForce * 2, 1);
+            this.vehicle.setBrake(brakeForce * 2, 2);
+            this.vehicle.setBrake(brakeForce * 2, 3);
         }
 
         const stopCar = () => {
@@ -195,6 +196,36 @@ export default class Car {
             this.vehicle.setSteeringValue(0, 0);
             this.vehicle.setSteeringValue(0, 1);
         }
-        // Car Movement ^^^
+        // Car Movement with Keys ^^^
+
+        const joystickMove = ( forward, turn ) => {          
+            const force = maxForce * forward;
+            const steer = maxSteerVal * -turn;
+          
+            if (forward!=0){
+              this.vehicle.setBrake(0, 0);
+              this.vehicle.setBrake(0, 1);
+              this.vehicle.setBrake(0, 2);
+              this.vehicle.setBrake(0, 3);
+          
+              this.vehicle.applyEngineForce(force, 2);
+              this.vehicle.applyEngineForce(force, 3);
+            }else{
+              this.vehicle.setBrake(brakeForce * 0.8, 0);
+              this.vehicle.setBrake(brakeForce * 0.8, 1);
+              this.vehicle.setBrake(brakeForce * 0.8, 2);
+              this.vehicle.setBrake(brakeForce * 0.8, 3);
+            }
+          
+            this.vehicle.setSteeringValue(steer, 0);
+            this.vehicle.setSteeringValue(steer, 1); 
+        }
+        
+        const joystick = new JoyStick({
+            game: this,
+            onMove: joystickMove
+        });
+
+        // JoyStick move ^^^
     }
 }

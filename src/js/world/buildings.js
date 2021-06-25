@@ -11,7 +11,7 @@ export default class Buildings {
 
     init() {
         this.updatePhysics();
-        for(let i = 0 ; i < 150 ; i++) {
+        for(let i = 0 ; i < 250 ; i++) {
             this.createBuilding( 
                 new THREE.Vector3((Math.random() - 0.5) * 500, 0, (Math.random() - 0.5) * 500),
                 new THREE.Vector3(Math.random() * 30, Math.random() * 30, Math.random() * 30),
@@ -21,7 +21,6 @@ export default class Buildings {
     }
 
     createBuilding(position, dimension, color) {
-        console.log(position, dimension);
         const buildingGeometry = new THREE.BoxBufferGeometry(1, 1, 1);
         const buildingMaterial = new THREE.MeshStandardMaterial({color});
         const building = new THREE.Mesh(buildingGeometry, buildingMaterial);
@@ -30,7 +29,6 @@ export default class Buildings {
         building.scale.copy(dimension);
         building.position.copy(position);
         this.scene.add(building);
-        console.log(building)
     
         const wheelMaterial = new CANNON.Material("wheelMaterial");
         const buildingShape = new CANNON.Box(new CANNON.Vec3(dimension.x * 0.5, dimension.y * 0.5, dimension.z * 0.5));
