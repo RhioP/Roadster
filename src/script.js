@@ -1,7 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import * as CANNON from 'cannon'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 import Car from './js/world/car';
 import Camera from './js/world/camera';
@@ -12,8 +12,29 @@ import gsap from 'gsap';
 
 var scene, camera, renderer, world, helper, car, light, light2;
 
-init();
+const loaderManager = new THREE.LoadingManager(
+  () => {
+    //Loaded
+    console.log("Everything Loaded")
+    gsap.to(".loader", {
+      delay: 1,
+      duration: 2,
+      translateY: "-100%",
+      ease: "ease-in-out",
+      pointerEvents: "none",
+    })
+  },
+  (x,y,z) => { 
+    //Progress
+    document.querySelector(".loader span").textContent = `${Math.floor(y/z*100)}% Loading...`;
+    gsap.to(".loading-bar", {
+      scaleY: y/z
+    })
+  }
+);
+const gltfLoader = new GLTFLoader(loaderManager);
 
+init();
 function init(){
   scene = new THREE.Scene();
   scene.background = new THREE.Color( 0x6e8db9 );
@@ -70,7 +91,7 @@ function initPhysics(){
     
     // We must add the contact materials to the world
     world.addContactMaterial(wheelGroundContactMaterial);
-    car = new Car(scene, world);
+    car = new Car(scene, world, gltfLoader);
     new Buildings(scene, world);
     new Camera(scene, world, car, camera);
     new Bricks(scene, world);

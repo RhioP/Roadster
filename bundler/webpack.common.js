@@ -72,16 +72,7 @@ module.exports = {
             // Fonts
             {
                 test: /\.(ttf|eot|woff|woff2)$/,
-                use:
-                [
-                    {
-                        loader: 'file-loader',
-                        options:
-                        {
-                            outputPath: 'assets/fonts/'
-                        }
-                    }
-                ]
+                use: ['url-loader?limit=100000']
             }
         ]
     }

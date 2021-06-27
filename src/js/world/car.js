@@ -4,9 +4,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import JoyStick from '../lib/joystick';
 
 export default class Car {
-    constructor(scene, world) {
+    constructor(scene, world, gltfLoader) {
         this.scene = scene;
         this.world = world;
+        this.gltfLoader = gltfLoader;
         this.vehicle = {};
         this.chassis = {};
         this.init();
@@ -36,7 +37,7 @@ export default class Car {
         chassisBody.angularVelocity.set(0, 0, 0);
         chassisBody.addShape(chassisShape);
 
-        gltfLoader.load("./models/car/chassis.gltf", gltf => {
+        this.gltfLoader.load("./models/car/chassis.gltf", gltf => {
             this.chassis = gltf.scene;
             this.chassis.scale.set(2, 2, 2);
             this.scene.add(this.chassis);
@@ -99,7 +100,7 @@ export default class Car {
         });
         const wheels = [];
         for(let i = 0 ; i < 4 ; i++) {
-            gltfLoader.load('./models/car/wheel.gltf', (gltf) => {
+            this.gltfLoader.load('./models/car/wheel.gltf', (gltf) => {
                 const model = gltf.scene;
                 model.scale.set(2, 2, 2)
                 if(i === 1 || i === 3)
@@ -226,10 +227,10 @@ export default class Car {
               this.vehicle.applyEngineForce(force, 2);
               this.vehicle.applyEngineForce(force, 3);
             }else{
-              this.vehicle.setBrake(brakeForce * 0.8, 0);
-              this.vehicle.setBrake(brakeForce * 0.8, 1);
-              this.vehicle.setBrake(brakeForce * 0.8, 2);
-              this.vehicle.setBrake(brakeForce * 0.8, 3);
+              this.vehicle.setBrake(brakeForce * 1.4, 0);
+              this.vehicle.setBrake(brakeForce * 1.4, 1);
+              this.vehicle.setBrake(brakeForce * 1.4, 2);
+              this.vehicle.setBrake(brakeForce * 1.4, 3);
             }
           
             this.vehicle.setSteeringValue(steer, 0);

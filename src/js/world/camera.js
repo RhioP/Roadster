@@ -13,11 +13,11 @@ export default class Camera {
         }
         this.camRotation = {
             x: 0,
-            y: -0.1,
+            y: 0,
         };
         this.prevCamRotation = {
             x: 0,
-            y: 0,
+            y: -0.5,
         };;
         this.mousePos = {
             x: 0,
