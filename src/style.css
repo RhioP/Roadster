@@ -86,7 +86,7 @@ body:active {
 .info {
     display: none;
     height: fit-content;
-    width: 30pc;
+    max-width: 30pc;
     position: absolute;
     margin: auto;
     top: 0;bottom: 0;left: 0;right: 0;
